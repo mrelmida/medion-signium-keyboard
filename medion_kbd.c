@@ -135,21 +135,21 @@ static irqreturn_t medion_kbd_interrupt(struct serio *serio, unsigned char data,
 			case 0x53: keycode = KEY_DELETE; down = true; break;
 			case 0xd3: keycode = KEY_DELETE; down = false; break;
 
-			// Right Ctrl (Sends Left Meta scancodes on this keyboard)
-			case 0x5b: keycode = KEY_RIGHTCTRL; down = true; break;
-			case 0xdb: keycode = KEY_RIGHTCTRL; down = false; break;
+			// Left Meta (Windows Key)
+			case 0x5b: keycode = KEY_LEFTMETA; down = true; break;
+			case 0xdb: keycode = KEY_LEFTMETA; down = false; break;
 
-			// Up Arrow (Inverted)
-			case 0xc8: keycode = KEY_UP; down = true; break;
-			case 0x48: keycode = KEY_UP; down = false; break;
+			// Up Arrow (Standard)
+			case 0x48: keycode = KEY_UP; down = true; break;
+			case 0xc8: keycode = KEY_UP; down = false; break;
 
-			// Down Arrow (Inverted)
-			case 0xd0: keycode = KEY_DOWN; down = true; break;
-			case 0x50: keycode = KEY_DOWN; down = false; break;
+			// Down Arrow (Standard)
+			case 0x50: keycode = KEY_DOWN; down = true; break;
+			case 0xd0: keycode = KEY_DOWN; down = false; break;
 
-			// Right Arrow (Inverted)
-			case 0xcd: keycode = KEY_RIGHT; down = true; break;
-			case 0x4d: keycode = KEY_RIGHT; down = false; break;
+			// Right Arrow (Standard)
+			case 0x4d: keycode = KEY_RIGHT; down = true; break;
+			case 0xcd: keycode = KEY_RIGHT; down = false; break;
 
 			default:
 				down = !(data & 0x80);
