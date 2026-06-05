@@ -2,11 +2,12 @@
 
 A custom Linux `serio` kernel driver module to fix the unresponsive internal keyboard on **Medion Signium 14 S1 OLED** laptops (and other models utilizing the `INTC816` or similar Intel HID framework) when running Linux distributions such as Fedora, Debian, or Ubuntu.
 
-## The Problem
-On these laptops, the internal keyboard behaves like a legacy PS/2 keyboard but has several firmware issues:
-1. **Set 1 scancodes:** The keyboard natively outputs Set 1 scancodes, but the standard Linux driver (`atkbd`) expects Set 2, resulting in scrambled key mappings (e.g. typing `A` registers as `2`).
-2. **Inverted Arrow Keys & Right Alt:** The `Up`, `Down`, and `Right` arrow keys, along with the `Right Alt` (AltGr) key, send their press and release codes **completely inverted** in hardware.
-3. **Motherboard ACPI Bug:** Without specific boot parameters, the motherboard's buggy ACPI configuration disables the keyboard port (`serio0`) entirely after boot.
+## Observations and Issues
+On this laptop model, the internal keyboard is completely unresponsive under standard Linux kernels. During investigation, the following behavior was noted, although it is unclear whether it stems from a kernel limitation, a driver issue, or a hardware/firmware quirk:
+1. **Scancode Misinterpretation:** The keyboard outputs signals that standard Linux drivers (`atkbd`) misinterpret, leading to scrambled key layouts (for instance, pressing `A` registers as `2`).
+2. **Inverted Inputs:** The `Up`, `Down`, and `Right` arrow keys, along with `Right Alt` (AltGr), send keycodes that behave as if their press and release states are inverted.
+3. **Port Inactivity:** Under default ACPI initialization, the keyboard controller port (`serio0`) often becomes inactive or is disabled shortly after kernel load.
+
 
 ## The Solution
 This driver (`medion_kbd.ko`) binds directly to the KBD serio port, intercepts the raw Set 1 scancodes, addresses the inverted states/custom modifiers, and reports correct keypresses to the input subsystem.
